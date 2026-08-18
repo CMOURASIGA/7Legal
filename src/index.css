@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
+  
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  
+  --color-border: var(--border-color);
+  --color-border-strong: var(--border-strong);
+  
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+}
+
+@layer base {
+  :root {
+    --brand-primary: #002B49;
+    --brand-secondary: #ffffff;
+    --brand-accent: #3b82f6;
+    
+    --background: #F4F7F9;
+    --surface: #ffffff;
+    --surface-secondary: #f1f5f9;
+    
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --border-color: #e2e8f0;
+    --border-strong: #cbd5e1;
+    
+    --success: #15803d;
+    --warning: #b45309;
+    --danger: #b91c1c;
+    --info: #1d4ed8;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+}

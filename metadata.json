@@ -1,0 +1,6 @@
+{
+  "name": "7Legal",
+  "description": "Plataforma de Experiência e Relacionamento Jurídico",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
