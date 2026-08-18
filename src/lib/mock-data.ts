@@ -10,9 +10,12 @@ export const MOCK_TENANTS: Tenant[] = [
     branding: {
       tenantId: "tenant-cs",
       companyName: "Consult Services",
-      primaryColor: "#002B49", // High density default blue
+      primaryColor: "#002B49", 
       secondaryColor: "#ffffff",
       accentColor: "#3b82f6",
+      logoUrl: "https://i.imgur.com/gxXnYsA.png",
+      loginTitle: "Gestão de projetos e operações",
+      loginSubtitle: "Acesse a plataforma exclusiva."
     }
   },
   {
@@ -27,6 +30,9 @@ export const MOCK_TENANTS: Tenant[] = [
       primaryColor: "#4f46e5", // Indigo
       secondaryColor: "#ffffff",
       accentColor: "#6366f1",
+      logoUrl: "https://i.imgur.com/gxXnYsA.png", // Will be replaced in UI but using fallback
+      loginTitle: "Portal do Cliente Alfa",
+      loginSubtitle: "Acompanhe seus processos e documentos com transparência."
     }
   },
   {
@@ -41,6 +47,8 @@ export const MOCK_TENANTS: Tenant[] = [
       primaryColor: "#059669", // Emerald
       secondaryColor: "#ffffff",
       accentColor: "#10b981",
+      loginTitle: "Área Jurídica Exclusiva",
+      loginSubtitle: "Painel centralizado de operações corporativas."
     }
   }
 ];

@@ -16,7 +16,6 @@ const STORAGE_KEYS = {
 
 export const StorageService = {
   init() {
-    // Only init if needed. Since we wiped it in last reload, we can remove the force wipe now.
     if (localStorage.getItem(STORAGE_KEYS.INITIALIZED)) return;
     
     localStorage.setItem(STORAGE_KEYS.TENANTS, JSON.stringify(MOCK_TENANTS));

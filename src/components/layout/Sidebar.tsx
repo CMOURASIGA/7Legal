@@ -12,11 +12,12 @@ import {
   Settings, 
   Building,
   LogOut,
-  Palette
+  Palette,
+  X
 } from "lucide-react";
 import { useBranding } from "@/providers/BrandingProvider";
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const { user, logout } = useAuth();
   const { branding } = useBranding();
   const location = useLocation();
@@ -51,15 +52,38 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-[var(--brand-primary)] text-[var(--brand-secondary)] hidden md:flex flex-col flex-shrink-0">
-      <div className="flex flex-col shrink-0 relative">
-        <div className="bg-white rounded-b-[2rem] shadow-lg relative z-10 w-full overflow-hidden flex items-center justify-center p-4">
-          <img 
-            src="https://i.imgur.com/gxXnYsA.png" 
-            alt="Consult Services Tecnologia" 
-            className="w-full h-auto object-contain max-h-[120px] scale-[1.02]"
-          />
-        </div>
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+          onClick={onClose}
+        />
+      )}
+      
+      <aside className={cn(
+        "w-64 bg-[var(--brand-primary)] text-[var(--brand-secondary)] flex flex-col flex-shrink-0 z-50 h-full transition-transform duration-300",
+        "fixed md:relative top-0 left-0 bottom-0",
+        isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      )}>
+        {/* Close button on mobile */}
+        {isOpen && (
+          <button 
+            onClick={onClose}
+            className="md:hidden absolute top-4 right-4 z-50 p-2 bg-black/20 text-white rounded-full hover:bg-black/40"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+        
+        <div className="flex flex-col shrink-0 relative">
+          <div className="bg-white rounded-b-[2rem] shadow-lg relative z-10 w-full overflow-hidden flex items-center justify-center p-4">
+            <img 
+              src={branding?.logoUrl || "https://i.imgur.com/gxXnYsA.png"} 
+              alt={branding?.companyName || "Consult Services Tecnologia"} 
+              className="w-full h-auto object-contain max-h-[120px] scale-[1.02]"
+            />
+          </div>
         
         <div className="px-6 pt-6 pb-2 flex flex-col gap-1 border-b border-white/10">
           <span className="text-[10px] font-bold tracking-[0.15em] text-[var(--brand-secondary)] uppercase">
@@ -148,5 +172,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

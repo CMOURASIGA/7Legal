@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Search } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Processes() {
   const { user, tenant } = useAuth();
+  const navigate = useNavigate();
   
   if (!user || !tenant) return null;
 
@@ -37,27 +39,31 @@ export function Processes() {
             </CardContent>
           </Card>
         ) : (
-          processes.map((process) => (
-            <Card key={process.id} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-6 flex flex-col md:flex-row items-start justify-between gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <h3 className="font-semibold text-lg text-[var(--brand-primary)]">{process.number}</h3>
-                    <Badge variant={process.status === "ACTIVE" ? "success" : "warning"}>
-                      {process.status}
-                    </Badge>
+          processes.map((process) => {
+            const client = StorageService.getClient(process.clientId);
+            return (
+              <Card key={process.id} className="hover:shadow-md transition-shadow cursor-pointer border hover:border-[var(--brand-primary)]/50" onClick={() => navigate(`/processes/${process.id}`)}>
+                <CardContent className="p-6 flex flex-col md:flex-row items-start justify-between gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="font-semibold text-lg text-[var(--brand-primary)]">{process.number}</h3>
+                      <Badge variant={process.status === "ACTIVE" ? "success" : "warning"}>
+                        {process.status}
+                      </Badge>
+                    </div>
+                    <p className="text-[var(--text-primary)] font-medium">{process.title}</p>
+                    {client && <p className="text-sm font-medium text-[var(--text-secondary)]">Cliente: {client.name}</p>}
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Última atualização: {new Date(process.updatedAt).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className="text-[var(--text-primary)] font-medium">{process.title}</p>
-                  <p className="text-sm text-[var(--text-secondary)]">
-                    Última atualização: {new Date(process.updatedAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <div>
-                  <Button variant="primary">Visualizar Detalhes</Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                  <div>
+                    <Button variant="primary" onClick={(e) => { e.stopPropagation(); navigate(`/processes/${process.id}`); }}>Visualizar Detalhes</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
         )}
       </div>
     </div>

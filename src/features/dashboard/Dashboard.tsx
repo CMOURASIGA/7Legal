@@ -57,8 +57,8 @@ export function Dashboard() {
             <h2 className="font-bold text-[var(--text-primary)]">Últimos Processos Atualizados</h2>
             <button className="text-[var(--brand-primary)] text-xs font-bold hover:underline">Ver todos</button>
           </div>
-          <div className="flex-1 overflow-auto bg-white">
-            <table className="w-full text-left border-collapse">
+          <div className="flex-1 overflow-x-auto bg-white">
+            <table className="w-full text-left border-collapse whitespace-nowrap md:whitespace-normal">
               <thead className="bg-[var(--surface-secondary)] text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">
                 <tr>
                   <th className="px-5 py-3 border-b border-[var(--border-color)]">Processo</th>
