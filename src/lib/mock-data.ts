@@ -10,9 +10,9 @@ export const MOCK_TENANTS: Tenant[] = [
     branding: {
       tenantId: "tenant-cs",
       companyName: "Consult Services",
-      primaryColor: "#002B49", 
+      primaryColor: "#003B73",
       secondaryColor: "#ffffff",
-      accentColor: "#3b82f6",
+      accentColor: "#00AEEF",
       logoUrl: "https://i.imgur.com/gxXnYsA.png",
       loginTitle: "Gestão de projetos e operações",
       loginSubtitle: "Acesse a plataforma exclusiva."
@@ -27,9 +27,9 @@ export const MOCK_TENANTS: Tenant[] = [
     branding: {
       tenantId: "tenant-alfa",
       companyName: "Jurídico Alfa",
-      primaryColor: "#4f46e5", // Indigo
+      primaryColor: "#003B73",
       secondaryColor: "#ffffff",
-      accentColor: "#6366f1",
+      accentColor: "#00AEEF",
       logoUrl: "https://i.imgur.com/gxXnYsA.png", // Will be replaced in UI but using fallback
       loginTitle: "Portal do Cliente Alfa",
       loginSubtitle: "Acompanhe seus processos e documentos com transparência."
@@ -44,9 +44,9 @@ export const MOCK_TENANTS: Tenant[] = [
     branding: {
       tenantId: "tenant-beta",
       companyName: "Beta Corporativo",
-      primaryColor: "#059669", // Emerald
+      primaryColor: "#003B73",
       secondaryColor: "#ffffff",
-      accentColor: "#10b981",
+      accentColor: "#00AEEF",
       loginTitle: "Área Jurídica Exclusiva",
       loginSubtitle: "Painel centralizado de operações corporativas."
     }
