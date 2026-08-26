@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { useBranding } from "@/providers/BrandingProvider";
 import { StorageService } from "@/lib/storage";
@@ -10,8 +10,9 @@ import { Upload, Wand2, RotateCcw } from "lucide-react";
 
 export function AdminWhitelabel() {
   const { tenant } = useAuth();
-  const { branding, setBrandingDraft } = useBranding();
+  const { branding, setBrandingDraft, saveBranding } = useBranding();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   if (!branding || !tenant) return null;
 
@@ -20,16 +21,19 @@ export function AdminWhitelabel() {
   };
 
   const handleSave = () => {
-    StorageService.saveBranding(tenant.id, branding);
-    window.location.reload(); // To force refresh everywhere
+    const result = saveBranding();
+    setFeedback({ type: result.ok ? "success" : "error", message: result.message });
   };
 
   const handleReset = () => {
     const defaultTenant = MOCK_TENANTS.find(t => t.id === tenant.id);
     if (defaultTenant && defaultTenant.branding) {
       setBrandingDraft(defaultTenant.branding);
-      StorageService.saveBranding(tenant.id, defaultTenant.branding);
-      window.location.reload();
+      const result = StorageService.saveBranding(tenant.id, defaultTenant.branding);
+      if (result.ok) {
+        window.dispatchEvent(new CustomEvent("7legal-brand-updated", { detail: defaultTenant.branding }));
+      }
+      setFeedback({ type: result.ok ? "success" : "error", message: result.message });
     }
   };
 
@@ -95,6 +99,12 @@ export function AdminWhitelabel() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 1_500_000) {
+        setFeedback({ type: "error", message: "A logo deve ter no máximo 1,5 MB para ser salva neste ambiente." });
+        e.target.value = "";
+        return;
+      }
+      setFeedback(null);
       const reader = new FileReader();
       reader.onload = (event) => {
         const result = event.target?.result as string;
@@ -230,6 +240,11 @@ export function AdminWhitelabel() {
               Salvar Configurações
             </Button>
           </div>
+          {feedback && (
+            <p role="status" className={`text-sm font-medium ${feedback.type === "success" ? "text-emerald-700" : "text-red-700"}`}>
+              {feedback.message}
+            </p>
+          )}
         </div>
 
         <div>
