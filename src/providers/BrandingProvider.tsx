@@ -6,6 +6,7 @@ import { StorageService } from "@/lib/storage";
 interface BrandingContextData {
   branding: BrandingConfig | null;
   setBrandingDraft: (branding: BrandingConfig) => void;
+  saveBranding: () => { ok: boolean; message: string };
   resetBranding: () => void;
 }
 
@@ -28,6 +29,18 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
     }
   }, [tenant]);
 
+  useEffect(() => {
+    const refreshBranding = () => {
+      if (!tenant) return;
+      const savedBranding = StorageService.getBranding(tenant.id) || tenant.branding;
+      setBranding(savedBranding);
+      applyBranding(savedBranding);
+    };
+
+    window.addEventListener("7legal-brand-updated", refreshBranding);
+    return () => window.removeEventListener("7legal-brand-updated", refreshBranding);
+  }, [tenant]);
+
   const applyBranding = (config: BrandingConfig) => {
     document.documentElement.style.setProperty("--brand-primary", config.primaryColor);
     document.documentElement.style.setProperty("--brand-secondary", config.secondaryColor);
@@ -40,6 +53,18 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
     applyBranding(newBranding);
   };
 
+  const saveBranding = () => {
+    if (!tenant || !branding) {
+      return { ok: false, message: "Não foi possível identificar a empresa ativa." };
+    }
+
+    const result = StorageService.saveBranding(tenant.id, branding);
+    if (result.ok) {
+      window.dispatchEvent(new CustomEvent("7legal-brand-updated", { detail: branding }));
+    }
+    return result;
+  };
+
   const resetBranding = () => {
     if (tenant) {
       setBrandingDraft(tenant.branding); // original from tenant
@@ -47,7 +72,7 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <BrandingContext.Provider value={{ branding, setBrandingDraft, resetBranding }}>
+    <BrandingContext.Provider value={{ branding, setBrandingDraft, saveBranding, resetBranding }}>
       {children}
     </BrandingContext.Provider>
   );
