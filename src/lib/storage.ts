@@ -59,16 +59,27 @@ export const StorageService = {
   },
   
   getBranding(tenantId: string) {
-    const data = localStorage.getItem(STORAGE_KEYS.BRANDING(tenantId));
-    return data ? JSON.parse(data) : null;
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.BRANDING(tenantId));
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
   },
   
-  saveBranding(tenantId: string, branding: any) {
-    localStorage.setItem(STORAGE_KEYS.BRANDING(tenantId), JSON.stringify(branding));
-    // also update tenant record for convenience
-    const tenants = this.getTenants();
-    const updated = tenants.map(t => t.id === tenantId ? { ...t, branding } : t);
-    localStorage.setItem(STORAGE_KEYS.TENANTS, JSON.stringify(updated));
+  saveBranding(tenantId: string, branding: Tenant["branding"]) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.BRANDING(tenantId), JSON.stringify(branding));
+      const tenants = this.getTenants();
+      const updated = tenants.map(t => t.id === tenantId ? { ...t, branding } : t);
+      localStorage.setItem(STORAGE_KEYS.TENANTS, JSON.stringify(updated));
+      return { ok: true, message: "Identidade visual salva neste ambiente." };
+    } catch {
+      return {
+        ok: false,
+        message: "Não foi possível salvar a identidade. Use uma imagem menor e tente novamente."
+      };
+    }
   },
 
   // Data
