@@ -11,12 +11,38 @@ const STORAGE_KEYS = {
   DOCUMENTS: "7legal:documents",
   MOVEMENTS: "7legal:movements",
   NOTIFICATIONS: "7legal:notifications",
-  INITIALIZED: "7legal:initialized"
+  INITIALIZED: "7legal:initialized",
+  BRANDING_VERSION: "7legal:branding-version"
 };
+
+const CURRENT_BRANDING_VERSION = "2";
+const LEGACY_DEMO_COLORS = new Set(["#002B49", "#4f46e5", "#059669"]);
 
 export const StorageService = {
   init() {
-    if (localStorage.getItem(STORAGE_KEYS.INITIALIZED)) return;
+    if (localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
+      if (localStorage.getItem(STORAGE_KEYS.BRANDING_VERSION) !== CURRENT_BRANDING_VERSION) {
+        const tenants = this.getTenants().map(tenant => {
+          const savedBranding = this.getBranding(tenant.id) || tenant.branding;
+          const defaultBranding = MOCK_TENANTS.find(item => item.id === tenant.id)?.branding;
+          const usesLegacyDemoColor = LEGACY_DEMO_COLORS.has(savedBranding.primaryColor);
+
+          if (!defaultBranding || !usesLegacyDemoColor) return tenant;
+
+          const migratedBranding = {
+            ...savedBranding,
+            primaryColor: defaultBranding.primaryColor,
+            secondaryColor: defaultBranding.secondaryColor,
+            accentColor: defaultBranding.accentColor
+          };
+          localStorage.setItem(STORAGE_KEYS.BRANDING(tenant.id), JSON.stringify(migratedBranding));
+          return { ...tenant, branding: migratedBranding };
+        });
+        localStorage.setItem(STORAGE_KEYS.TENANTS, JSON.stringify(tenants));
+        localStorage.setItem(STORAGE_KEYS.BRANDING_VERSION, CURRENT_BRANDING_VERSION);
+      }
+      return;
+    }
     
     localStorage.setItem(STORAGE_KEYS.TENANTS, JSON.stringify(MOCK_TENANTS));
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(MOCK_USERS));
@@ -32,6 +58,7 @@ export const StorageService = {
     });
     
     localStorage.setItem(STORAGE_KEYS.INITIALIZED, "true");
+    localStorage.setItem(STORAGE_KEYS.BRANDING_VERSION, CURRENT_BRANDING_VERSION);
   },
 
   // Auth
