@@ -44,12 +44,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
   return (
     <>
       {isOpen && (
-        <button
-          type="button"
-          aria-label="Fechar menu"
-          className="fixed inset-0 z-40 bg-slate-950/45 md:hidden"
-          onClick={onClose}
-        />
+        <button type="button" aria-label="Fechar menu" className="fixed inset-0 z-40 bg-slate-950/45 md:hidden" onClick={onClose} />
       )}
 
       <aside
@@ -58,12 +53,12 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="relative px-4 pb-6 pt-4 border-b border-white/15">
-          <div className="flex h-[144px] w-full items-center justify-center overflow-hidden rounded-xl bg-white px-1 py-1 shadow-sm">
+        <div className="relative border-b border-white/15 px-4 pb-6 pt-4">
+          <div className="flex h-[144px] w-full items-center justify-center overflow-hidden rounded-xl border border-slate-200/90 bg-white px-1 py-1 shadow-sm ring-1 ring-black/5">
             <img
               src={logoUrl}
               alt={branding?.companyName || "Consult Services Tecnologia"}
-              className="max-h-[132px] w-[99%] object-contain object-center"
+              className="max-h-[128px] max-w-[92%] object-contain object-center"
             />
           </div>
 
@@ -78,7 +73,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
 
           <div className="mt-6">
             <div className="flex items-center gap-2">
-              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[var(--brand-accent)]">7LEGAL</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-white">7LEGAL</p>
               <span className="rounded-md border border-amber-300/50 bg-amber-300/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wide text-amber-200">Demo</span>
             </div>
             <p className="mt-1.5 text-sm font-semibold leading-5 text-white">Gestão jurídica e operações</p>
@@ -102,10 +97,9 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
                         onClick={onClose}
                         className={cn(
                           "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-                          active
-                            ? "bg-[var(--brand-accent)] text-slate-950 shadow-sm"
-                            : "text-slate-100 hover:bg-white/10 hover:text-white"
+                          active ? "font-bold text-slate-950 shadow-sm" : "text-slate-100 hover:bg-white/10 hover:text-white"
                         )}
+                        style={active ? { backgroundColor: "color-mix(in srgb, var(--brand-primary) 22%, white)" } : undefined}
                       >
                         <Icon className="h-4 w-4 shrink-0" />
                         <span>{route.label}</span>
