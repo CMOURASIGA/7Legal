@@ -70,7 +70,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
           </button>
 
           <div className="min-w-0">
-            <p className="truncate text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-accent)]">Gestão jurídica</p>
+            <p className="truncate text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Gestão jurídica</p>
             <h1 className="truncate text-base font-semibold text-[var(--text-primary)]">{pageTitle}</h1>
           </div>
 
@@ -146,7 +146,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
               aria-expanded={showUserMenu}
               aria-haspopup="menu"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--brand-accent)] text-xs font-bold text-slate-950">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--brand-primary)] text-xs font-bold text-[var(--brand-on-primary)]">
                 {initials}
               </span>
               <span className="hidden min-w-0 text-left md:block">
@@ -182,7 +182,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
         <div className="fixed right-6 top-20 z-50 animate-in fade-in slide-in-from-top-5 duration-300">
           <div className="flex w-80 gap-4 rounded-xl border border-[var(--border-color)] bg-white p-4 shadow-xl">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand-primary)] shadow-inner">
-              <Bell className="h-5 w-5 text-white" />
+              <Bell className="h-5 w-5 text-[var(--brand-on-primary)]" />
             </div>
             <div>
               <h4 className="text-sm font-bold leading-tight text-[var(--text-primary)]">Novo documento disponível</h4>
