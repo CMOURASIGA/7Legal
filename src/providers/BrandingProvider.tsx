@@ -12,6 +12,16 @@ interface BrandingContextData {
 
 const BrandingContext = createContext<BrandingContextData>({} as BrandingContextData);
 
+function readableTextColor(hex: string) {
+  const normalized = hex.replace("#", "");
+  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) return "#ffffff";
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.62 ? "#0f172a" : "#ffffff";
+}
+
 export function BrandingProvider({ children }: { children: React.ReactNode }) {
   const { tenant } = useAuth();
   const [branding, setBranding] = useState<BrandingConfig | null>(null);
@@ -22,10 +32,10 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
       setBranding(savedBranding);
       applyBranding(savedBranding);
     } else {
-      // Apply defaults if no tenant
       document.documentElement.style.removeProperty("--brand-primary");
       document.documentElement.style.removeProperty("--brand-secondary");
       document.documentElement.style.removeProperty("--brand-accent");
+      document.documentElement.style.removeProperty("--brand-on-primary");
     }
   }, [tenant]);
 
@@ -45,7 +55,7 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.style.setProperty("--brand-primary", config.primaryColor);
     document.documentElement.style.setProperty("--brand-secondary", config.secondaryColor);
     document.documentElement.style.setProperty("--brand-accent", config.accentColor);
-    // You can apply logos and other things to custom state or properties
+    document.documentElement.style.setProperty("--brand-on-primary", readableTextColor(config.primaryColor));
   };
 
   const setBrandingDraft = (newBranding: BrandingConfig) => {
@@ -54,21 +64,14 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
   };
 
   const saveBranding = () => {
-    if (!tenant || !branding) {
-      return { ok: false, message: "Não foi possível identificar a empresa ativa." };
-    }
-
+    if (!tenant || !branding) return { ok: false, message: "Não foi possível identificar a empresa ativa." };
     const result = StorageService.saveBranding(tenant.id, branding);
-    if (result.ok) {
-      window.dispatchEvent(new CustomEvent("7legal-brand-updated", { detail: branding }));
-    }
+    if (result.ok) window.dispatchEvent(new CustomEvent("7legal-brand-updated", { detail: branding }));
     return result;
   };
 
   const resetBranding = () => {
-    if (tenant) {
-      setBrandingDraft(tenant.branding); // original from tenant
-    }
+    if (tenant) setBrandingDraft(tenant.branding);
   };
 
   return (
