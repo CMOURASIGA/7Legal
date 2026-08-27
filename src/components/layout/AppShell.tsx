@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/providers/AuthProvider";
 
+// Mantém a shell aprovada da branch demo e força o pipeline de preview a reconstruir esta revisão.
 export function AppShell() {
   const { user, isLoading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
